@@ -3,17 +3,16 @@ using System;
 
 namespace Game.Paddle
 {
-
-    public enum Player 
-    { 
-        PLAYER_ONE,
-        PLAYER_TWO
-    }
-
+    /// <summary>
+    /// Implementation of the PaddleController abstract class to be used by the player
+    /// Gets keyboard input from the player and sets the movement direction for the paddle this controller is controlling
+    /// </summary>
     public class PlayerController : PaddleController
     {
         // Member variables.
-        [Export] //NOTE: Exporting this variable is for testing purposes only.
+        //NOTE: Exporting this variable is for testing purposes only. Normally, the PongGame script should set this value
+        // when is creates this node
+        [Export]
         private Player _player;
         private Vector2 _direction;
 
@@ -37,6 +36,11 @@ namespace Game.Paddle
                     break;
             }
             PaddleToControl.SetDirection(_direction);
+        }
+
+        public void SetPlayer(Player controllingPlayer)
+        {
+            _player = controllingPlayer;
         }
     }
 }
