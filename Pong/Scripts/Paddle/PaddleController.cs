@@ -12,7 +12,7 @@ namespace Game.Paddle
         // Member Variables
         [Export] //NOTE: Designer should't have to set the paddle to control in the inspector. This is only for testing purposes.
         private NodePath _paddlePath;
-        protected Paddle PaddleToControl;
+        protected PongPaddle PaddleToControl;
 
         // NOTE: Using the ready function in this way is for testing putposes only.
         // The paddle controller should not be directly setting the paddle it controls.
@@ -20,11 +20,11 @@ namespace Game.Paddle
         {
             if(_paddlePath != null)
             {
-                PaddleToControl = GetNode<Paddle>(_paddlePath);
+                PaddleToControl = GetNode<PongPaddle>(_paddlePath);
             }
         }
 
-        public void SetPaddleToControl(Paddle Paddle)
+        public void SetPaddleToControl(PongPaddle Paddle)
         {
             PaddleToControl = Paddle;
         }

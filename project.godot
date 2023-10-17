@@ -49,6 +49,7 @@ player2_move_down={
 
 2d_physics/layer_1="default"
 2d_physics/layer_2="goal"
+2d_physics/layer_3="paddle"
 
 [physics]
 
