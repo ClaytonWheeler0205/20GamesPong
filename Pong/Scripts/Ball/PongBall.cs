@@ -37,7 +37,7 @@ namespace Game.Ball
         private const int GOAL_COLLISION_LAYER = 2;
         private const int PADDLE_COLLISION_LAYER = 4;
 
-        private const float MAX_BOUNCE_ANGLE = (float)(5 * Math.PI / 12); // 75 degrees
+        private const float MAX_BOUNCE_ANGLE = (float)(Math.PI / 3); // 60 degrees
         private bool _hasHitPaddle = false; // bool to make sure we only handle paddle collision only a single time we hit a paddle
 
         // Signals
@@ -91,10 +91,10 @@ namespace Game.Ball
             switch(playerToFace)
             {
                 case Player.PLAYER_ONE:
-                    angle = (float)GD.RandRange((19 * Math.PI / 18), (35 * Math.PI / 18));
+                    angle = (float)GD.RandRange((Math.PI / 18), (17 * Math.PI / 18));
                     break;
                 case Player.PLAYER_TWO:
-                    angle = (float)GD.RandRange((Math.PI / 18), (17 * Math.PI / 18));
+                    angle = (float)GD.RandRange((19 * Math.PI / 18), (35 * Math.PI / 18));
                     break;
             }
             _direction = new Vector2(0, -1).Rotated(angle);
@@ -146,7 +146,7 @@ namespace Game.Ball
                 {
                     // Change the angle of the ball depending on how far from the center of the paddle the ball hit, up to a max angle
                     // of 75 degrees.
-                    PongPaddle collidingPaddle = collision.Collider as PongPaddle;
+                    PaddleBase collidingPaddle = collision.Collider as PaddleBase;
                     float bounceAngle = GetBounceAngle(collidingPaddle);
                     // Set the direction vector with trig
                     _direction.x = (float)Math.Cos(bounceAngle);
@@ -169,11 +169,11 @@ namespace Game.Ball
             }
         }
 
-        private float GetBounceAngle(PongPaddle collidingPaddle)
+        private float GetBounceAngle(PaddleBase collidingPaddle)
         {
             float relativeIntersectY = collidingPaddle.Position.y - Position.y;
             // This should give us a value between -1.0 and 1.0
-            float relativeIntersectYNormalized = (relativeIntersectY / (collidingPaddle.PaddleHeight / 2));
+            float relativeIntersectYNormalized = (relativeIntersectY / (collidingPaddle.GetPaddleSize() / 2));
             // GD.Print("Relative angle: " + relativeIntersectYNormalized);
             float bounceAngle = relativeIntersectYNormalized * MAX_BOUNCE_ANGLE;
             // Clamp to ensure that our angle is between the values we set it to
