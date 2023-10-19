@@ -11,7 +11,7 @@ namespace Game.Paddle
     {
         // Member Variables
         [Export] //NOTE: Designer should't have to set the paddle to control in the inspector. This is only for testing purposes.
-        private NodePath _paddlePath;
+        private NodePath _paddlePath = null;
         protected PaddleBase PaddleToControl;
 
         // NOTE: Using the ready function in this way is for testing putposes only.

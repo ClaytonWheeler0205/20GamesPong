@@ -22,8 +22,9 @@ namespace Game
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            PongBall ball = GetNode<PongBall>("Ball");
-            ball.StartBall(Player.PLAYER_ONE);
+            BallBase ball = GetNode<BallBase>("Ball");
+            ball.StartBall();
+            
         }
     }
 }

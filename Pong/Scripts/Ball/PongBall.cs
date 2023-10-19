@@ -5,90 +5,89 @@ using Game.Paddle;
 namespace Game.Ball
 {
 
-    public class PongBall : KinematicBody2D
+    public class PongBall : BallBase
     {
-        // Ball movement member variables
+        /// <summary>
+        /// When the ball touches a paddle, the current speed of the ball will be increased by this amount. This will make the ball
+        /// go faster on every paddle hit.
+        /// </summary>
         [Export]
-        private float _speed = 300.0f; // The starting speed of the ball
-        [Export]
-        private float _speedIncrease = 10.0f; // The amount the ball speeds up every time the paddle is hit.
-        private float _currentSpeed; // The current speed, used to move the ball. Updates on each paddle hit
-        private Vector2 _direction = Vector2.Zero; // The direction vector for the ball.
-        private bool _isMoving = false; // Vector to let the update function know that the ball should be moved. Set to true on a round start.
+        private float _speedIncrease = 10.0f;
 
-        // Node reference member variables
-        private Sprite _spriteRef = null; // Reference to the sprite node to make it invisible on start
+        /// <summary>
+        /// The true speed of the pong ball. Determined by the base ball's speed plus any speed increases added by hitting the paddle
+        /// </summary>
+        private float _currentSpeed;
 
-        // Ball starting position member variables
+        /// <summary>
+        /// Reference to the sprite node in the pong ball scene tree
+        /// </summary>
+        private Sprite _spriteRef;
 
-        // This will be the in center of the arena. This vector will also be used to determine which side the
-        // ball is on when is hits a goal for scoring purposes. The center of the arena is defined as the position the ball is placed
-        // in the scene by the designer.
-        private Vector2 _startPos;
-
-        // We export the min and max Y values to determine the range of our random y position in the arena
-        // This values will be used to give the ball a random starting position on the start of a round.
+        // Min and max Y values representing the top and bottom of the arean to give the pong ball a random starting y position.
         [Export]
         private float _minY = 0.0f;
         [Export]
         private float _maxY = 0.0f;
 
-        // Collision layers for special collision cases when handling ball colision
+        // Collision layers for handling the collision of specific objects in the pong game
         private const int GOAL_COLLISION_LAYER = 2;
         private const int PADDLE_COLLISION_LAYER = 4;
 
+        /// <summary>
+        /// The maximum angle of the ball that will bounce off the paddle when the ball hits the paddle. The largest angle will occur if the
+        /// ball hits the paddle the furthest point away from the center.
+        /// </summary>
         private const float MAX_BOUNCE_ANGLE = (float)(Math.PI / 3); // 60 degrees
-        private bool _hasHitPaddle = false; // bool to make sure we only handle paddle collision only a single time we hit a paddle
 
-        // Signals
+        /// <summary>
+        /// boolean to make sure handling any collision with the paddle occurs only one time the ball touches the paddle
+        /// Ensures that bouncing away from the paddle occurs only once. Set to true when the ball collides with a paddle
+        /// and false if the ball isn't colliding with the paddle.
+        /// </summary>
+        private bool _hasHitPaddle;
+
+        /// <summary>
+        /// The player the ball should face/move towards at the start of a round.
+        /// </summary>
+        private Player _playerToFace;
+
+        /// <summary>
+        /// Signal to let the game know that a player has scored a point (i.e. the ball has made contact with a player's goal)
+        /// </summary>
+        /// <param name="scoringPlayer">The player that scored a point</param>
         [Signal]
         delegate void PlayerScored(Player scoringPlayer);
 
-        // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
+            // Player 1 is always the first player the ball should move towards.
+            _playerToFace = Player.PLAYER_ONE;
             _spriteRef = GetNode<Sprite>("BallSprite");
-            if( _spriteRef == null)
+            if(_spriteRef == null)
             {
                 GD.PrintErr("Sprite node not found! Does the sprite node exist? If it does, check the sprite node name.");
             }
-            _startPos = Position;
-            ResetBall();
+            base._Ready();
         }
 
-        public override void _PhysicsProcess(float delta)
+        protected override void ResetBall()
         {
-            if (_isMoving)
-            {
-                MoveBall(delta);
-            }
-        }
-
-        /// <summary>
-        /// Resets the ball's position back to the center of the arena, sets the ball's velocity to zero, and sets the ball to be invisible. 
-        /// This occurs at the start of the game, and whenever the ball hits the goal
-        /// </summary>
-        private void ResetBall()
-        {
-            Position = _startPos;
-            _direction = Vector2.Zero;
-            _isMoving = false;
             _spriteRef.Visible = false;
+            base.ResetBall();
         }
 
-        /// <summary>
-        /// Called by the pong game to let the ball know it should start moving and give it a random y position and angle depending on which
-        /// player the ball should move towards. At the start of the game, it should face player 1, then every other call to this function
-        /// should face the player whose goal was hit by the ball.
-        /// </summary>
-        /// <param name="playerToFace">Determines the player should face and move towards. Defines the angle the ball direction will have</param>
-        public void StartBall(Player playerToFace)
+        public override void StartBall()
         {
-            float xPos = _startPos.x;
+            // set the ball to the center of the arena and give it a random y position
+            float xPos = StartPos.x;
+            GD.Randomize();
             float yPos = (float)GD.RandRange(_minY, _maxY);
             Position = new Vector2(xPos, yPos);
             float angle = 0.0f;
-            switch(playerToFace)
+            // set the angle of the ball determined by which side of the arean the ball should move towards
+            GD.Randomize();
+            switch (_playerToFace)
             {
                 case Player.PLAYER_ONE:
                     angle = (float)GD.RandRange((Math.PI / 18), (17 * Math.PI / 18));
@@ -97,39 +96,34 @@ namespace Game.Ball
                     angle = (float)GD.RandRange((19 * Math.PI / 18), (35 * Math.PI / 18));
                     break;
             }
-            _direction = new Vector2(0, -1).Rotated(angle);
+            Direction = new Vector2(0, -1).Rotated(angle);
+            _currentSpeed = Speed;
             _spriteRef.Visible = true;
-            _currentSpeed = _speed;
-            _isMoving = true;
+            base.StartBall();
         }
 
-        /// <summary>
-        /// Move the ball according to its direction and speed. If the ball hits a physics object, HandleCollision is called
-        /// </summary>
-        private void MoveBall(float delta)
+        protected override void MoveBall(float delta)
         {
-            KinematicCollision2D collision = MoveAndCollide(_direction * _currentSpeed * delta);
-            if(collision != null)
+            KinematicCollision2D collision = MoveAndCollide(Direction * _currentSpeed * delta);
+            if (collision != null)
             {
                 HandleCollision(collision);
             }
+            else
+            {
+                _hasHitPaddle = false;
+            }
         }
 
-        /// <summary>
-        /// Determinds what the ball should do in response to a certain collision. If the collision is either a wall of the paddle, the
-        /// ball should simply bounce off the collision. If the collision is a goal, it should send a signal that a player scored, and then
-        /// call ResetBall.
-        /// </summary>
-        /// <param name="collision">The collision that the ball is handling and determining its type</param>
-        private void HandleCollision(KinematicCollision2D collision)
+        protected override void HandleCollision(KinematicCollision2D collision)
         {
             CollisionObject2D collisionObject = collision.Collider as CollisionObject2D;
-            if(collisionObject != null)
+            if (collisionObject != null)
             {
-                if(collisionObject.CollisionLayer == GOAL_COLLISION_LAYER)
+                if (collisionObject.CollisionLayer == GOAL_COLLISION_LAYER)
                 {
                     // Hit a goal physics object! Now we determine who scored a point
-                    if(Position.x > _startPos.x) // Player one goal. Player two has scored!
+                    if (Position.x > StartPos.x) // Player one goal. Player two has scored!
                     {
                         EmitSignal("PlayerScored", Player.PLAYER_TWO);
                         GD.Print("Player two scores!");
@@ -142,16 +136,17 @@ namespace Game.Ball
                     ResetBall();
                     _hasHitPaddle = false;
                 }
-                else if(collisionObject.CollisionLayer == PADDLE_COLLISION_LAYER && !_hasHitPaddle)
+                else if (collisionObject.CollisionLayer == PADDLE_COLLISION_LAYER && !_hasHitPaddle)
                 {
                     // Change the angle of the ball depending on how far from the center of the paddle the ball hit, up to a max angle
                     // of 75 degrees.
                     PaddleBase collidingPaddle = collision.Collider as PaddleBase;
                     float bounceAngle = GetBounceAngle(collidingPaddle);
                     // Set the direction vector with trig
-                    _direction.x = (float)Math.Cos(bounceAngle);
-                    _direction.y = (float)-Math.Sin(bounceAngle);
-                    _direction = _direction.Normalized(); // normalize the vector
+                    float newX = (float)Math.Cos(bounceAngle);
+                    float newY = (float)-Math.Sin(bounceAngle);
+                    Direction = new Vector2(newX, newY);
+                    Direction = Direction.Normalized(); // normalize the vector
                     // set this bool to true so we don't handle paddle collision again until the ball has left the paddle's collision
                     _hasHitPaddle = true;
                     // Increase the speed on a ball hit
@@ -159,7 +154,7 @@ namespace Game.Ball
                 }
                 else
                 {
-                    _direction = _direction.Bounce(collision.Normal);
+                    Direction = Direction.Bounce(collision.Normal);
                     _hasHitPaddle = false;
                 }
             }
@@ -169,11 +164,11 @@ namespace Game.Ball
             }
         }
 
-        private float GetBounceAngle(PaddleBase collidingPaddle)
+        private float GetBounceAngle(PaddleBase paddle)
         {
-            float relativeIntersectY = collidingPaddle.Position.y - Position.y;
+            float relativeIntersectY = paddle.Position.y - Position.y;
             // This should give us a value between -1.0 and 1.0
-            float relativeIntersectYNormalized = (relativeIntersectY / (collidingPaddle.GetPaddleSize() / 2));
+            float relativeIntersectYNormalized = (relativeIntersectY / (paddle.GetPaddleSize() / 2));
             // GD.Print("Relative angle: " + relativeIntersectYNormalized);
             float bounceAngle = relativeIntersectYNormalized * MAX_BOUNCE_ANGLE;
             // Clamp to ensure that our angle is between the values we set it to
