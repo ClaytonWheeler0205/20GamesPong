@@ -57,7 +57,7 @@ namespace Game.Ball
         /// <summary>
         /// Resets the data of the ball object to that it returns to it's starting position and is no longer moving.
         /// </summary>
-        protected virtual void ResetBall()
+        public virtual void ResetBall()
         {
             _isMoving = false;
             _direction = Vector2.Zero;

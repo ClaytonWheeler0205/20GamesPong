@@ -10,10 +10,6 @@ namespace Game.Paddle
     public class PlayerController : PaddleController
     {
         // Member variables.
-        //NOTE: Exporting this variable is for testing purposes only. Normally, the PongGame script should set this value
-        // when is creates this node
-        [Export]
-        private Player _player;
         private Vector2 _direction;
 
         public override void _Ready()
@@ -26,7 +22,7 @@ namespace Game.Paddle
         // We use the unhandled input method to ensure that menu actions take priority in the game.
         public override void _UnhandledInput(InputEvent @event)
         {
-            switch(_player)
+            switch(PaddleToControl.PaddlePlayer)
             {
                 case Player.PLAYER_ONE:
                     _direction.y = Input.GetAxis("player1_move_up", "player1_move_down");
@@ -35,12 +31,10 @@ namespace Game.Paddle
                     _direction.y = Input.GetAxis("player2_move_up", "player2_move_down");
                     break;
             }
-            PaddleToControl.SetDirection(_direction);
-        }
-
-        public void SetPlayer(Player controllingPlayer)
-        {
-            _player = controllingPlayer;
+            if (PaddleToControl != null)
+            {
+                PaddleToControl.SetDirection(_direction);
+            }
         }
     }
 }

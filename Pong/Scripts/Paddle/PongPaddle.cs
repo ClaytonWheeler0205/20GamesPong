@@ -14,6 +14,7 @@ namespace Game.Paddle
         public override void _Ready()
         {
             _paddleHeight = PaddleSize * Transform.Scale.y;
+            base._Ready();
         }
 
         public override float GetPaddleSize()

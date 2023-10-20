@@ -58,6 +58,12 @@ namespace Game.Ball
         /// <param name="scoringPlayer">The player that scored a point</param>
         [Signal]
         delegate void PlayerScored(Player scoringPlayer);
+        
+        /// <summary>
+        /// Singnal to let the game know that the ball has hit a goal in the arena.
+        /// </summary>
+        [Signal]
+        delegate void GoalHit();
 
         public override void _Ready()
         {
@@ -71,7 +77,7 @@ namespace Game.Ball
             base._Ready();
         }
 
-        protected override void ResetBall()
+        public override void ResetBall()
         {
             _spriteRef.Visible = false;
             base.ResetBall();
@@ -126,15 +132,18 @@ namespace Game.Ball
                     if (Position.x > StartPos.x) // Player one goal. Player two has scored!
                     {
                         EmitSignal("PlayerScored", Player.PLAYER_TWO);
+                        _playerToFace = Player.PLAYER_ONE;
                         GD.Print("Player two scores!");
                     }
                     else // Player two goal. Player one has scored!
                     {
                         EmitSignal("PlayerScored", Player.PLAYER_ONE);
+                        _playerToFace = Player.PLAYER_TWO;
                         GD.Print("Player one scores!");
                     }
                     ResetBall();
                     _hasHitPaddle = false;
+                    EmitSignal("GoalHit");
                 }
                 else if (collisionObject.CollisionLayer == PADDLE_COLLISION_LAYER && !_hasHitPaddle)
                 {

@@ -10,23 +10,18 @@ namespace Game.Paddle
     public abstract class PaddleController : Node
     {
         // Member Variables
-        [Export] //NOTE: Designer should't have to set the paddle to control in the inspector. This is only for testing purposes.
-        private NodePath _paddlePath = null;
-        protected PaddleBase PaddleToControl;
-
-        // NOTE: Using the ready function in this way is for testing putposes only.
-        // The paddle controller should not be directly setting the paddle it controls.
-        public override void _Ready()
-        {
-            if(_paddlePath != null)
-            {
-                PaddleToControl = GetNode<PaddleBase>(_paddlePath);
-            }
-        }
+        private PaddleBase _paddleToControl;
+        protected PaddleBase PaddleToControl => _paddleToControl;
 
         public void SetPaddleToControl(PaddleBase Paddle)
         {
-            PaddleToControl = Paddle;
+            _paddleToControl = Paddle;
+        }
+
+        public void Destroy()
+        {
+            _paddleToControl = null;
+            QueueFree();
         }
     }
 }
