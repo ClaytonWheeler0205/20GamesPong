@@ -58,7 +58,8 @@ namespace Game
                 _rightPaddleController.Destroy();
                 _rightPaddleController = null;
             }
-
+            _rightPaddleRef.ResetPaddle();
+            _leftPaddleRef.ResetPaddle();
             return isSuccessful;
         }
 

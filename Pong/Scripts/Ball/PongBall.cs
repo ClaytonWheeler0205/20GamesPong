@@ -133,13 +133,11 @@ namespace Game.Ball
                     {
                         EmitSignal("PlayerScored", Player.PLAYER_TWO);
                         _playerToFace = Player.PLAYER_ONE;
-                        GD.Print("Player two scores!");
                     }
                     else // Player two goal. Player one has scored!
                     {
                         EmitSignal("PlayerScored", Player.PLAYER_ONE);
                         _playerToFace = Player.PLAYER_TWO;
-                        GD.Print("Player one scores!");
                     }
                     ResetBall();
                     _hasHitPaddle = false;

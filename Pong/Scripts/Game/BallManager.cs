@@ -21,6 +21,8 @@ namespace Game
         [Export]
         private float _pauseTime = 3.0f;
 
+        private bool _isActive = false;
+
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
@@ -42,6 +44,7 @@ namespace Game
             if(_ballRef != null)
             {
                 _ballRef.StartBall();
+                _isActive = true;
                 return true;
             }
             return false;
@@ -52,6 +55,7 @@ namespace Game
             if(_ballRef != null)
             {
                 _ballRef.ResetBall();
+                _isActive = false;
                 return true;
             }
             return false;
@@ -64,7 +68,10 @@ namespace Game
 
         public void OnPauseTimerTimeout()
         {
-            _ballRef.StartBall();
+            if (_isActive)
+            {
+                _ballRef.StartBall();
+            }
         }
     }
 }

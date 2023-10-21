@@ -27,5 +27,12 @@ namespace Game
             get => _gameMode;
             set { _gameMode = value; }
         }
+
+        private static int _scoreToWin = 5;
+        public static int ScoreToWin
+        {
+            get => _scoreToWin;
+            set { _scoreToWin = value; }
+        }
     }
 }

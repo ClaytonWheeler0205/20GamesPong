@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Pong/Sprites/PongBackground.png" type="Texture" id=1]
 [ext_resource path="res://Pong/Sprites/PongWall.png" type="Texture" id=2]
+[ext_resource path="res://Pong/Scenes/UI/UI_Score.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Pong/Scenes/Game/PaddleManager.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Pong/Scripts/Game/PongGame.cs" type="Script" id=5]
 [ext_resource path="res://Pong/Scenes/Game/BallManager.tscn" type="PackedScene" id=7]
@@ -149,6 +150,14 @@ position = Vector2( 475, 0 )
 
 [node name="LeftPaddle" parent="Managers/PaddleManager" index="1"]
 position = Vector2( -475, 0 )
+
+[node name="ScoreUI" parent="." instance=ExtResource( 3 )]
+offset = Vector2( -510, -280 )
+transform = Transform2D( 1, 0, 0, 1, -510, -280 )
+follow_viewport_enable = true
+
+[connection signal="PlayerScored" from="Managers/BallManager/Ball" to="ScoreUI" method="OnPlayerScored"]
+[connection signal="GameOver" from="ScoreUI" to="." method="OnGameOver"]
 
 [editable path="Managers/BallManager"]
 [editable path="Managers/PaddleManager"]
