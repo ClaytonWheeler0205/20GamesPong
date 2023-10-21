@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Pong/Scripts/Game/BallManager.cs" type="Script" id=1]
+[ext_resource path="res://Pong/Scenes/Ball/Ball.tscn" type="PackedScene" id=2]
 
 [node name="BallManager" type="Node"]
 script = ExtResource( 1 )
@@ -8,4 +9,8 @@ script = ExtResource( 1 )
 [node name="PauseTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="Ball" parent="." instance=ExtResource( 2 )]
+_speedIncrease = 30.0
+
 [connection signal="timeout" from="PauseTimer" to="." method="OnPauseTimerTimeout"]
+[connection signal="GoalHit" from="Ball" to="." method="OnBallGoalHit"]

@@ -11,17 +11,19 @@ namespace Game
     public class PaddleManager : Node, IGameManager
     {
         // Node paths and node references to the two paddles
-        [Export]
-        private NodePath _leftPaddlePath = null;
         private PaddleBase _leftPaddleRef = null;
-        [Export]
-        private NodePath _rightPaddlePath = null;
         private PaddleBase _rightPaddleRef = null;
 
         // node references to the paddle controllers
         private PaddleController _leftPaddleController = null;
         private PaddleController _rightPaddleController = null;
-                    
+
+        public override void _Ready()
+        {
+            _leftPaddleRef = GetNode<PaddleBase>("LeftPaddle");
+            _rightPaddleRef = GetNode<PaddleBase>("RightPaddle");
+        }
+
         public bool StartGame()
         {
             CreateControllers();
@@ -58,38 +60,6 @@ namespace Game
             }
 
             return isSuccessful;
-        }
-
-        public void SetupLeftPaddle()
-        {
-            if(_leftPaddlePath == null)
-            {
-                GD.PrintErr("Left paddle node path not found! Has it not been assigned in the inspector?");
-            }
-            else
-            {
-                _leftPaddleRef = GetNode<PaddleBase>(_leftPaddlePath);
-                if(_leftPaddleRef == null)
-                {
-                    GD.PrintErr("Left paddle node not found! Has it been moved or deleted?");
-                }
-            }
-        }
-
-        public void SetupRightPaddle()
-        {
-            if (_rightPaddlePath == null)
-            {
-                GD.PrintErr("Left paddle node path not found! Has it not been assigned in the inspector?");
-            }
-            else
-            {
-                _rightPaddleRef = GetNode<PaddleBase>(_rightPaddlePath);
-                if (_rightPaddleRef == null)
-                {
-                    GD.PrintErr("Left paddle node not found! Has it been moved or deleted?");
-                }
-            }
         }
 
         private void CreateControllers()

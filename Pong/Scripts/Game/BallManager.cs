@@ -6,11 +6,6 @@ namespace Game
     public class BallManager : Node, IGameManager
     {
         /// <summary>
-        /// Path the the ball that this manager should be handling. This is the path of the node defined by _ballRef
-        /// </summary>
-        [Export]
-        private NodePath _ballPath = null;
-        /// <summary>
         /// Object reference to the ball that this manager will be managing
         /// </summary>
         private BallBase _ballRef = null;
@@ -34,23 +29,12 @@ namespace Game
             {
                 GD.PrintErr("Timer obejct not found! Is it not in the scene?");
             }
+            _ballRef = GetNode<BallBase>("Ball");
+            if(_ballRef == null)
+            {
+                GD.PrintErr("Ball object not found! Is it not in the scene?");
+            }
             
-        }
-
-        public void SetBallReference()
-        {
-            if (_ballPath == null)
-            {
-                GD.PrintErr("Ball path is null! Has it been added in the inspector?");
-            }
-            else
-            {
-                _ballRef = GetNode<BallBase>(_ballPath);
-                if (_ballRef == null)
-                {
-                    GD.PrintErr("Ball object not found! Has the ball been moved or deleted?");
-                }
-            }
         }
         
         public bool StartGame()
