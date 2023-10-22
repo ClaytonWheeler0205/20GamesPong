@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Pong_Goal_Hit.wav-76612eb7ed61fcf196f34c97d74ecc9e.sample"
+
+[deps]
+
+source_file="res://Pong/Audio/Pong_Goal_Hit.wav"
+dest_files=[ "res://.import/Pong_Goal_Hit.wav-76612eb7ed61fcf196f34c97d74ecc9e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=1
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
