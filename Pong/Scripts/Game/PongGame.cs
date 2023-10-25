@@ -12,11 +12,11 @@ namespace Game
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            _ballManager = GetNode<IGameManager>("Managers/BallManager");
+            _ballManager = GetNode<IGameManager>("%BallManager");
             _ballManager.StartGame();
-            _paddleManager = GetNode<IGameManager>("Managers/PaddleManager");
+            _paddleManager = GetNode<IGameManager>("%PaddleManager");
             _paddleManager.StartGame();
-            _pongScore = GetNode<IGameScore>("ScoreUI");
+            _pongScore = GetNode<IGameScore>("%ScoreUI");
         }
 
         public void OnGameOver(Player winningPlayer)

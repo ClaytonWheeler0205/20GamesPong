@@ -130,13 +130,14 @@ z_index = 1
 texture = ExtResource( 2 )
 
 [node name="Background" type="Sprite" parent="ArenaVisuals"]
-position = Vector2( -1, 6 )
+position = Vector2( 0, 6 )
 scale = Vector2( 64.6875, 38.5625 )
 texture = ExtResource( 1 )
 
 [node name="Managers" type="Node" parent="."]
 
 [node name="BallManager" parent="Managers" instance=ExtResource( 7 )]
+unique_name_in_owner = true
 _pauseTime = 1.5
 
 [node name="Ball" parent="Managers/BallManager" index="1"]
@@ -144,6 +145,7 @@ _minY = -270.0
 _maxY = 270.0
 
 [node name="PaddleManager" parent="Managers" instance=ExtResource( 4 )]
+unique_name_in_owner = true
 
 [node name="RightPaddle" parent="Managers/PaddleManager" index="0"]
 position = Vector2( 475, 0 )
@@ -152,6 +154,7 @@ position = Vector2( 475, 0 )
 position = Vector2( -475, 0 )
 
 [node name="ScoreUI" parent="." instance=ExtResource( 3 )]
+unique_name_in_owner = true
 offset = Vector2( -510, -280 )
 transform = Transform2D( 1, 0, 0, 1, -510, -280 )
 follow_viewport_enable = true

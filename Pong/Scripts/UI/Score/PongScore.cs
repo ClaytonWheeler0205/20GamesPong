@@ -36,12 +36,12 @@ namespace Game.Score
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            _playerOneLabelRef = GetNode<Label>("PlayerOneScore");
+            _playerOneLabelRef = GetNode<Label>("%PlayerOneScore");
             if(_playerOneLabelRef == null)
             {
                 GD.PrintErr("Player one score label not found! Is it in the scene tree? If so, is the node path incorrect?");
             }
-            _playerTwoLabelRef = GetNode<Label>("PlayerTwoScore");
+            _playerTwoLabelRef = GetNode<Label>("%PlayerTwoScore");
             if(_playerTwoLabelRef == null)
             {
                 GD.PrintErr("Player two score label not found! Is it in the scene tree? If so, is the node path incorrect?");

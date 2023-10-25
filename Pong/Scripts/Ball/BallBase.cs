@@ -31,6 +31,7 @@ namespace Game.Ball
         /// is set to true.
         /// </summary>
         private bool _isMoving;
+        public bool IsMoving => _isMoving;
 
         /// <summary>
         /// Vector representing the starting position of the ball. Used to revert the ball back to a starting position on reset.

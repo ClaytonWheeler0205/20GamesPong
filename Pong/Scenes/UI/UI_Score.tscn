@@ -11,6 +11,7 @@ font_data = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="PlayerTwoScore" type="Label" parent="."]
+unique_name_in_owner = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -212.0
@@ -23,6 +24,7 @@ align = 2
 valign = 1
 
 [node name="PlayerOneScore" type="Label" parent="."]
+unique_name_in_owner = true
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = 164.0

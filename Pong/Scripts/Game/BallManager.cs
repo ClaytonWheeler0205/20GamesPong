@@ -26,12 +26,12 @@ namespace Game
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            _timerRef = GetNode<Timer>("PauseTimer");
+            _timerRef = GetNode<Timer>("%PauseTimer");
             if(_timerRef == null)
             {
                 GD.PrintErr("Timer obejct not found! Is it not in the scene?");
             }
-            _ballRef = GetNode<BallBase>("Ball");
+            _ballRef = GetNode<BallBase>("%Ball");
             if(_ballRef == null)
             {
                 GD.PrintErr("Ball object not found! Is it not in the scene?");

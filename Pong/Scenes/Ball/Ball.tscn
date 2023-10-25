@@ -6,11 +6,12 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4, 4 )
 
-[node name="Ball" type="KinematicBody2D"]
+[node name="Ball" type="KinematicBody2D" groups=["Ball"]]
 collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="BallSprite" type="Sprite" parent="."]
+unique_name_in_owner = true
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 

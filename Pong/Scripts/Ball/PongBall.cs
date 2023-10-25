@@ -78,7 +78,7 @@ namespace Game.Ball
             _goalHitScene = GD.Load<PackedScene>("res://Pong/Scenes/FX/SFX_PongGoalHit.tscn");
             // Player 1 is always the first player the ball should move towards.
             _playerToFace = Player.PLAYER_ONE;
-            _spriteRef = GetNode<Sprite>("BallSprite");
+            _spriteRef = GetNode<Sprite>("%BallSprite");
             if(_spriteRef == null)
             {
                 GD.PrintErr("Sprite node not found! Does the sprite node exist? If it does, check the sprite node name.");

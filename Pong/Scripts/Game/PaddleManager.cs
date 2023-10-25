@@ -20,8 +20,8 @@ namespace Game
 
         public override void _Ready()
         {
-            _leftPaddleRef = GetNode<PaddleBase>("LeftPaddle");
-            _rightPaddleRef = GetNode<PaddleBase>("RightPaddle");
+            _leftPaddleRef = GetNode<PaddleBase>("%LeftPaddle");
+            _rightPaddleRef = GetNode<PaddleBase>("%RightPaddle");
         }
 
         public bool StartGame()
