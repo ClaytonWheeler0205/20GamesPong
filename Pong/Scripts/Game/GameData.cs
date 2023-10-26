@@ -21,7 +21,7 @@ namespace Game
     /// </summary>
     public static class GameData
     {
-        private static GameMode _gameMode = GameMode.TWO_PLAYER_GAME;
+        private static GameMode _gameMode = GameMode.ONE_PLAYER_GAME;
         public static GameMode Mode
         {
             get => _gameMode;

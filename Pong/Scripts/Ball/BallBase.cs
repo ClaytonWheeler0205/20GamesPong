@@ -20,11 +20,7 @@ namespace Game.Ball
         /// Vector representing the direction of the ball
         /// </summary>
         private Vector2 _direction;
-        protected Vector2 Direction
-        {
-            get => _direction;
-            set => _direction = value;
-        }
+        public Vector2 Direction => _direction;
 
         /// <summary>
         /// Boolean to determine if the ball should be moving or should be stationary. Movement code will only be executed if this value
@@ -71,6 +67,11 @@ namespace Game.Ball
         public virtual void StartBall()
         {
             _isMoving = true;
+        }
+
+        protected void SetDirection(Vector2 newDirection)
+        {
+            _direction = newDirection;
         }
 
         /// <summary>

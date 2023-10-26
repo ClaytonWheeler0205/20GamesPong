@@ -71,6 +71,9 @@ namespace Game
             switch(GameData.Mode)
             {
                 case GameMode.ONE_PLAYER_GAME:
+                    PackedScene aiPaddle = GD.Load<PackedScene>("res://Pong/Scenes/Paddle/AIControllerBasic.tscn");
+                    _leftPaddleController = aiPaddle.Instance() as PaddleController;
+                    AddChild(_leftPaddleController);
                     break;
                 case GameMode.TWO_PLAYER_GAME:
                     _leftPaddleController = playerPaddle.Instance() as PaddleController;

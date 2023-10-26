@@ -27,6 +27,7 @@ namespace Game.Paddle
 
         public void SetDirection(Vector2 newDirection)
         {
+            Position = new Vector2(_startPos.x, Position.y);
             _velocity = newDirection;
         }
 

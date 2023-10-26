@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Pong/Scripts/Paddle/AIControllerBasic.cs" type="Script" id=1]
+
+[node name="AIControllerBasic" type="Node"]
+script = ExtResource( 1 )
+
+[node name="MistakeTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.13
+one_shot = true
+
+[connection signal="timeout" from="MistakeTimer" to="." method="OnMistakerTimerTimeout"]

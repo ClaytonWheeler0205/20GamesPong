@@ -111,7 +111,7 @@ namespace Game.Ball
                     angle = (float)GD.RandRange((19 * Math.PI / 18), (35 * Math.PI / 18));
                     break;
             }
-            Direction = new Vector2(0, -1).Rotated(angle);
+            SetDirection(new Vector2(0, -1).Rotated(angle));
             _currentSpeed = Speed;
             _spriteRef.Visible = true;
             base.StartBall();
@@ -172,13 +172,13 @@ namespace Game.Ball
                         // Determine if the x position of the velocity vector should be negative or positive depending on which paddle hit the ball
                         if (Position.x > StartPos.x)
                         {
-                            Direction = new Vector2(-newX, newY);
+                            SetDirection(new Vector2(-newX, newY));
                         }
                         else
                         {
-                            Direction = new Vector2(newX, newY);
+                            SetDirection(new Vector2(newX, newY));
                         }
-                        Direction = Direction.Normalized(); // normalize the vector
+                        SetDirection(Direction.Normalized()); // normalize the vector
                                                             // Increase the speed on a ball hit
                         _currentSpeed += _speedIncrease;
                     }
@@ -187,7 +187,7 @@ namespace Game.Ball
                 {
                     _ballHitSFX = _ballHitScene.Instance() as AudioStreamPlayer;
                     GetNode("/root").AddChild(_ballHitSFX);
-                    Direction = Direction.Bounce(collision.Normal);
+                    SetDirection(Direction.Bounce(collision.Normal));
                     _hasHitPaddle = false;
                 }
             }
