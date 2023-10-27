@@ -1,7 +1,8 @@
 using Godot;
 using System;
+using System.Data.SqlTypes;
 
-namespace Game.Score
+namespace Game.UI
 {
     /// <summary>
     /// Class that stores the scores for both players in a Pong game. The class will also let the game know when a player has won the game.
@@ -46,6 +47,7 @@ namespace Game.Score
             {
                 GD.PrintErr("Player two score label not found! Is it in the scene tree? If so, is the node path incorrect?");
             }
+            Visible = true;
         }
 
         public void ResetScore()

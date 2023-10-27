@@ -1,4 +1,4 @@
-namespace Game.Score
+namespace Game.UI
 {
     /// <summary>
     /// Interface for classes that deal with storing and keeping track of the game's score
