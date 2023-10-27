@@ -3,30 +3,32 @@
 [ext_resource path="res://Pong/Fonts/Pong_Text_Font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Pong/Scripts/UI/Score/PongScore.cs" type="Script" id=2]
 
-[node name="ScoreUI" type="CanvasLayer"]
+[node name="ScoreUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 2 )
 
 [node name="PlayerTwoScore" type="Label" parent="."]
 unique_name_in_owner = true
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -212.0
-margin_right = -164.0
+margin_left = -210.0
+margin_right = -160.0
 margin_bottom = 110.0
 grow_horizontal = 0
 custom_fonts/font = ExtResource( 1 )
 text = "0"
-align = 2
+align = 1
 valign = 1
 
 [node name="PlayerOneScore" type="Label" parent="."]
 unique_name_in_owner = true
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = 164.0
-margin_right = 212.0
+margin_left = 162.0
+margin_right = 112.0
 margin_bottom = 110.0
 custom_fonts/font = ExtResource( 1 )
 text = "0"
-align = 2
+align = 1
 valign = 1

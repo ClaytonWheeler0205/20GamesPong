@@ -3,7 +3,7 @@ using System;
 
 namespace Game.UI
 {
-    public class TextLabelBasic : CanvasLayer, ITextLabel
+    public class TextLabelBasic : Control, ITextLabel
     {
         // Child node references
         private Label _textLabelRef = null;

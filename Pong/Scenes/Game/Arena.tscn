@@ -2,10 +2,10 @@
 
 [ext_resource path="res://Pong/Sprites/PongBackground.png" type="Texture" id=1]
 [ext_resource path="res://Pong/Sprites/PongWall.png" type="Texture" id=2]
-[ext_resource path="res://Pong/Scenes/UI/UI_Score.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Pong/Scenes/UI/UI_Scoreboard.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Pong/Scenes/Game/PaddleManager.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Pong/Scripts/Game/PongGame.cs" type="Script" id=5]
-[ext_resource path="res://Pong/Scenes/UI/UI_WinLabel.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Pong/Scenes/UI/UI_WinDisplay.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Pong/Scenes/Game/BallManager.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -153,21 +153,21 @@ position = Vector2( 475, 0 )
 [node name="LeftPaddle" parent="Managers/PaddleManager" index="1"]
 position = Vector2( -475, 0 )
 
-[node name="UI" type="Node" parent="."]
+[node name="GUI" type="CanvasLayer" parent="."]
+process_priority = 1
 
-[node name="ScoreUI" parent="UI" instance=ExtResource( 3 )]
+[node name="ScoreUI" parent="GUI" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-visible = false
 
-[node name="WinLabel" parent="UI" instance=ExtResource( 6 )]
+[node name="WinLabel" parent="GUI" instance=ExtResource( 6 )]
 unique_name_in_owner = true
 visible = false
 _displayDuration = 3.0
 
-[connection signal="PlayerScored" from="Managers/BallManager/Ball" to="UI/ScoreUI" method="OnPlayerScored"]
-[connection signal="GameOver" from="UI/ScoreUI" to="." method="OnGameOver"]
-[connection signal="timeout" from="UI/WinLabel/DisplayTimer" to="." method="OnWinTextTimeout"]
+[connection signal="PlayerScored" from="Managers/BallManager/Ball" to="GUI/ScoreUI" method="OnPlayerScored"]
+[connection signal="GameOver" from="GUI/ScoreUI" to="." method="OnGameOver"]
+[connection signal="timeout" from="GUI/WinLabel/DisplayTimer" to="." method="OnWinTextTimeout"]
 
 [editable path="Managers/BallManager"]
 [editable path="Managers/PaddleManager"]
-[editable path="UI/WinLabel"]
+[editable path="GUI/WinLabel"]

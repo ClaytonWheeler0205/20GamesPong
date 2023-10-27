@@ -7,7 +7,7 @@ namespace Game.UI
     /// <summary>
     /// Class that stores the scores for both players in a Pong game. The class will also let the game know when a player has won the game.
     /// </summary>
-    public class PongScore : CanvasLayer, IGameScore
+    public class PongScore : Control, IGameScore
     {
         /// <summary>
         /// Reference to the label node that displays player one's score.
