@@ -15,13 +15,27 @@ namespace Game.UI
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
+            // Get the text label reference
             _textLabelRef = GetNode<Label>("%WinText");
+            if(_textLabelRef == null)
+            {
+                GD.PrintErr("Text label not found! Is it not in the scene?");
+            }
+
+            // Get the display timer reference
             _displayTimer = GetNode<Timer>("%DisplayTimer");
+            if(_displayTimer == null)
+            {
+                GD.PrintErr("Display timer not found! Is it not in the scene?");
+            }
         }
 
         public void SetText(string text)
         {
-            _textLabelRef.Text = text;
+            if (_textLabelRef != null)
+            {
+                _textLabelRef.Text = text;
+            }
         }
 
         public void DisplayText()

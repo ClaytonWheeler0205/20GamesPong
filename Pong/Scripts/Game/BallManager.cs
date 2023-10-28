@@ -26,11 +26,14 @@ namespace Game
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
+            // Get the timer child node reference
             _timerRef = GetNode<Timer>("%PauseTimer");
             if(_timerRef == null)
             {
                 GD.PrintErr("Timer obejct not found! Is it not in the scene?");
             }
+
+            // Get the ball child node reference
             _ballRef = GetNode<BallBase>("%Ball");
             if(_ballRef == null)
             {
@@ -63,14 +66,14 @@ namespace Game
 
         public void OnBallGoalHit()
         {
-            _timerRef.Start(_pauseTime);
+            _timerRef?.Start(_pauseTime);
         }
 
         public void OnPauseTimerTimeout()
         {
             if (_isActive)
             {
-                _ballRef.StartBall();
+                _ballRef?.StartBall();
             }
         }
     }

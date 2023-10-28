@@ -14,61 +14,59 @@ namespace Game
         public override void _Ready()
         {
             _ballManager = GetNode<IGameManager>("%BallManager");
-            if (_ballManager != null)
+            if (_ballManager == null)
             {
-                _ballManager.StartGame();
+                GD.PrintErr("Pong ball manager not found! Is it not in the scene?");
             }
 
             _paddleManager = GetNode<IGameManager>("%PaddleManager");
-            if (_paddleManager != null)
+            if (_paddleManager == null)
             {
-                _paddleManager.StartGame();
+                GD.PrintErr("Pong paddle manager not found! Is it not in the scene?");
             }
 
             _pongScore = GetNode<IGameScore>("%ScoreUI");
+            if(_pongScore == null)
+            {
+                GD.PrintErr("Pong score display not found! Is it not in the scene?");
+            }
 
             _winTextLabel = GetNode<ITextLabel>("%WinLabel");
-            if (_winTextLabel != null)
+            if (_winTextLabel == null)
             {
-                _winTextLabel.HideText();
+                GD.PrintErr("Win text label not found! Is it not in the scene?");
             }
+
+            StartGame();
+        }
+
+        public void StartGame()
+        {
+            _ballManager?.StartGame();
+            _paddleManager?.StartGame();
         }
 
         public void OnGameOver(Player winningPlayer)
         {
-            if (_winTextLabel != null)
+            switch (winningPlayer)
             {
-                switch (winningPlayer)
-                {
-                    case Player.PLAYER_ONE:
-                        _winTextLabel.SetText("Player One Wins!");
-                        break;
-                    case Player.PLAYER_TWO:
-                        _winTextLabel.SetText("Player Two Wins!");
-                        break;
-                }
-                _winTextLabel.DisplayText();
+                case Player.PLAYER_ONE:
+                    _winTextLabel?.SetText("Player One Wins!");
+                    break;
+                case Player.PLAYER_TWO:
+                    _winTextLabel?.SetText("Player Two Wins!");
+                    break;
             }
-            if (_ballManager != null)
-            {
-                _ballManager.EndGame();
-            }
-            if (_paddleManager != null)
-            {
-                _paddleManager.EndGame();
-            }
+            _winTextLabel?.DisplayText();
+
+            _ballManager?.EndGame();
+            _paddleManager?.EndGame();
         }
 
         public void OnWinTextTimeout()
         {
-            if( _winTextLabel != null )
-            {
-                _winTextLabel.HideText();
-            }
-            if(_pongScore != null)
-            {
-                _pongScore.ResetScore();
-            }
+            _winTextLabel?.HideText();
+            _pongScore?.ResetScore();
             // Return to main menu
         }
 
@@ -76,22 +74,10 @@ namespace Game
         {
             if (@event.IsActionPressed("reset_game"))
             {
-                if (_ballManager != null)
-                {
-                    _ballManager.EndGame();
-                }
-                if (_paddleManager != null)
-                {
-                    _paddleManager.EndGame();
-                }
-                if(_winTextLabel != null)
-                {
-                    _winTextLabel.HideText();
-                }
-                if (_pongScore != null)
-                {
-                    _pongScore.ResetScore();
-                }
+                _ballManager?.EndGame();
+                _paddleManager?.EndGame();
+                _winTextLabel?.HideText();
+                _pongScore?.ResetScore();
             }
         }
     }

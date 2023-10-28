@@ -53,10 +53,8 @@ namespace Game.Ball
         private Player _playerToFace;
 
         // AudioStreamPlayer nodes to create and add to the game
-        PackedScene _ballHitScene;
-        AudioStreamPlayer _ballHitSFX;
-        PackedScene _goalHitScene;
-        AudioStreamPlayer _goalHitSFX;
+        PackedScene _ballHitSFX;
+        PackedScene _goalHitSFX;
 
         /// <summary>
         /// Signal to let the game know that a player has scored a point (i.e. the ball has made contact with a player's goal)
@@ -74,8 +72,9 @@ namespace Game.Ball
         public override void _Ready()
         {
             // Create scene instances of the SFX to play
-            _ballHitScene = GD.Load<PackedScene>("res://Pong/Scenes/FX/SFX_PongBallHit.tscn");
-            _goalHitScene = GD.Load<PackedScene>("res://Pong/Scenes/FX/SFX_PongGoalHit.tscn");
+            _ballHitSFX = GD.Load<PackedScene>("res://Pong/Scenes/FX/SFX_PongBallHit.tscn");
+            _goalHitSFX = GD.Load<PackedScene>("res://Pong/Scenes/FX/SFX_PongGoalHit.tscn");
+
             // Player 1 is always the first player the ball should move towards.
             _playerToFace = Player.PLAYER_ONE;
             _spriteRef = GetNode<Sprite>("%BallSprite");
@@ -88,37 +87,49 @@ namespace Game.Ball
 
         public override void ResetBall()
         {
-            _spriteRef.Visible = false;
+            if (_spriteRef != null)
+            {
+                _spriteRef.Visible = false;
+            }
             base.ResetBall();
         }
 
         public override void StartBall()
         {
-            // set the ball to the center of the arena and give it a random y position
+            // set the ball to the center of the arena and give it a random y position. Also reset its angle.
             float xPos = StartPos.x;
             GD.Randomize();
             float yPos = (float)GD.RandRange(_minY, _maxY);
             Position = new Vector2(xPos, yPos);
             float angle = 0.0f;
-            // set the angle of the ball determined by which side of the arean the ball should move towards
+
+            // set the angle of the ball determined by which side of the arena the ball should move towards (towards player one of two)
             GD.Randomize();
             switch (_playerToFace)
             {
                 case Player.PLAYER_ONE:
                     angle = (float)GD.RandRange((Math.PI / 18), (17 * Math.PI / 18));
                     break;
+
                 case Player.PLAYER_TWO:
                     angle = (float)GD.RandRange((19 * Math.PI / 18), (35 * Math.PI / 18));
                     break;
             }
+
+            // Set the ball's direction, speed, and visibility
             SetDirection(new Vector2(0, -1).Rotated(angle));
             _currentSpeed = Speed;
-            _spriteRef.Visible = true;
+            if (_spriteRef != null)
+            {
+                _spriteRef.Visible = true;
+            }
+
             base.StartBall();
         }
 
         protected override void MoveBall(float delta)
         {
+            // Move the ball and grab a KinematicCollision2D if we have hit something
             KinematicCollision2D collision = MoveAndCollide(Direction * _currentSpeed * delta);
             if (collision != null)
             {
@@ -126,73 +137,84 @@ namespace Game.Ball
             }
             else
             {
+                // If we didn't hit anything, then we definitely didn't hit the paddle!
                 _hasHitPaddle = false;
             }
         }
 
+        // Note that collision not being null is a precondition to this method being called.
         protected override void HandleCollision(KinematicCollision2D collision)
         {
+            // Get the object we collided with, to check its collision layer
             CollisionObject2D collisionObject = collision.Collider as CollisionObject2D;
-            if (collisionObject != null)
+
+            // Case 1: The ball hit a goal.
+            if (collisionObject.CollisionLayer == GOAL_COLLISION_LAYER)
             {
-                if (collisionObject.CollisionLayer == GOAL_COLLISION_LAYER)
+                GetNode("/root").AddChild(_goalHitSFX.Instance());
+
+                // Determine who scored a point based on if the x position is to the right or left of center.
+                if (Position.x > StartPos.x) // Player one goal. Player two has scored!
                 {
-                    _goalHitSFX = _goalHitScene.Instance() as AudioStreamPlayer;
-                    GetNode("/root").AddChild(_goalHitSFX);
-                    // Hit a goal physics object! Now we determine who scored a point
-                    if (Position.x > StartPos.x) // Player one goal. Player two has scored!
-                    {
-                        EmitSignal("PlayerScored", Player.PLAYER_TWO);
-                        _playerToFace = Player.PLAYER_ONE;
-                    }
-                    else // Player two goal. Player one has scored!
-                    {
-                        EmitSignal("PlayerScored", Player.PLAYER_ONE);
-                        _playerToFace = Player.PLAYER_TWO;
-                    }
-                    ResetBall();
-                    _hasHitPaddle = false;
-                    EmitSignal("GoalHit");
+                    EmitSignal("PlayerScored", Player.PLAYER_TWO);
+                    _playerToFace = Player.PLAYER_ONE;
                 }
-                else if (collisionObject.CollisionLayer == PADDLE_COLLISION_LAYER)
+
+                else // Player two goal. Player one has scored!
                 {
-                    if (!_hasHitPaddle)
-                    {
-                        // set this bool to true so we don't handle paddle collision again until the ball has left the paddle's collision
-                        _hasHitPaddle = true;
-                        _ballHitSFX = _ballHitScene.Instance() as AudioStreamPlayer;
-                        GetNode("/root").AddChild(_ballHitSFX);
-                        // Change the angle of the ball depending on how far from the center of the paddle the ball hit, up to a max angle
-                        // of 75 degrees.
-                        PaddleBase collidingPaddle = collision.Collider as PaddleBase;
-                        float bounceAngle = GetBounceAngle(collidingPaddle);
-                        // Set the direction vector with trig
-                        float newX = (float)Math.Cos(bounceAngle);
-                        float newY = (float)-Math.Sin(bounceAngle);
-                        // Determine if the x position of the velocity vector should be negative or positive depending on which paddle hit the ball
-                        if (Position.x > StartPos.x)
-                        {
-                            SetDirection(new Vector2(-newX, newY));
-                        }
-                        else
-                        {
-                            SetDirection(new Vector2(newX, newY));
-                        }
-                        SetDirection(Direction.Normalized()); // normalize the vector
-                                                            // Increase the speed on a ball hit
-                        _currentSpeed += _speedIncrease;
-                    }
+                    EmitSignal("PlayerScored", Player.PLAYER_ONE);
+                    _playerToFace = Player.PLAYER_TWO;
                 }
-                else
+
+                // Reset
+                ResetBall();
+                _hasHitPaddle = false;
+                EmitSignal("GoalHit");
+            }
+
+            // Case 2: The ball hit a paddle.
+            else if (collisionObject.CollisionLayer == PADDLE_COLLISION_LAYER)
+            {
+                // Only handle paddle collision if we haven't handled the collision for this paddle yet.
+                if (!_hasHitPaddle)
                 {
-                    _ballHitSFX = _ballHitScene.Instance() as AudioStreamPlayer;
-                    GetNode("/root").AddChild(_ballHitSFX);
-                    SetDirection(Direction.Bounce(collision.Normal));
-                    _hasHitPaddle = false;
+                    _hasHitPaddle = true;
+
+                    // Play a ball hit sound effect
+                    GetNode("/root").AddChild(_ballHitSFX.Instance());
+
+                    // Change the angle of the ball depending on how far from the center of the paddle the ball hit, up to a max angle
+                    // of 75 degrees.
+                    PaddleBase collidingPaddle = collision.Collider as PaddleBase;
+                    float bounceAngle = GetBounceAngle(collidingPaddle);
+
+                    // Set the direction vector with trig
+                    float newX = (float)Math.Cos(bounceAngle);
+                    float newY = (float)-Math.Sin(bounceAngle);
+
+                    // Determine if the x position of the velocity vector should be negative or positive depending on which paddle hit the ball
+                    if (Position.x > StartPos.x) // Right paddle
+                    {
+                        SetDirection(new Vector2(-newX, newY));
+                    }
+
+                    else // Left paddle
+                    {
+                        SetDirection(new Vector2(newX, newY));
+                    }
+
+                    // Normalize the vector and increase the ball's speed.
+                    SetDirection(Direction.Normalized()); 
+                    _currentSpeed += _speedIncrease;
                 }
             }
+
+            // Case 3: The ball hit a wall
             else
             {
+                // Play the ball hi sound effect, and bounce off the wall
+                GetNode("/root").AddChild(_ballHitSFX.Instance());
+                SetDirection(Direction.Bounce(collision.Normal));
                 _hasHitPaddle = false;
             }
         }

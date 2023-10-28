@@ -52,10 +52,19 @@ namespace Game.UI
 
         public void ResetScore()
         {
+            // Reset player one score
             _playerOneScore = 0;
-            _playerOneLabelRef.Text = _playerOneScore.ToString();
+            if (_playerOneLabelRef != null)
+            {
+                _playerOneLabelRef.Text = _playerOneScore.ToString();
+            }
+
+            // Reset player two score
             _playerTwoScore = 0;
-            _playerTwoLabelRef.Text = _playerTwoScore.ToString();
+            if (_playerTwoLabelRef != null)
+            {
+                _playerTwoLabelRef.Text = _playerTwoScore.ToString();
+            }
         }
 
         /// <summary>
@@ -69,15 +78,22 @@ namespace Game.UI
             {
                 case Player.PLAYER_ONE:
                     _playerOneScore++;
-                    _playerOneLabelRef.Text = _playerOneScore.ToString();
+                    if (_playerOneLabelRef != null)
+                    {
+                        _playerOneLabelRef.Text = _playerOneScore.ToString();
+                    }
                     if(_playerOneScore == GameData.ScoreToWin)
                     {
                         EmitSignal("GameOver", Player.PLAYER_ONE);
                     }
                     break;
+
                 case Player.PLAYER_TWO:
                     _playerTwoScore++;
-                    _playerTwoLabelRef.Text = _playerTwoScore.ToString();
+                    if (_playerTwoLabelRef != null)
+                    {
+                        _playerTwoLabelRef.Text = _playerTwoScore.ToString();
+                    }
                     if(_playerTwoScore == GameData.ScoreToWin)
                     {
                         EmitSignal("GameOver", Player.PLAYER_TWO);

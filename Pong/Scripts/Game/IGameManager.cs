@@ -13,7 +13,7 @@ namespace Game
         /// Resets or cleans up objects that the manage is responsible for after a game has ended. (Note, a game ending does not necessarily
         /// mean that the program has terminated.)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True is the manager has successfully cleaned up the objects it managers, and false if otherwise</returns>
         bool EndGame();
     }
 }
