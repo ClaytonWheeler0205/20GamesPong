@@ -17,10 +17,15 @@ namespace Game.Paddle
         private BallBase _ballRef = null;
 
         /// <summary>
-        /// The the margin of error the paddle the AI controlls can have from the center of the paddle to be considered in the same Y
+        /// The maximum margin of error the paddle the AI controlls can have from the center of the paddle to be considered in the same Y
         /// position as the ball it's tracking.
         /// </summary>
-        private const float BALL_MARGIN = 24.0f;
+        private const float MAX_BALL_MARGIN = 30.0f;
+        
+        /// <summary>
+        /// The distance from the center of the paddle that the AI will currently aim for. This changes before the paddle starts moving again.
+        /// </summary>
+        private float _ballMargin = 0.0f;
 
         /// <summary>
         /// The max speed the paddle controlled by the AI will move. It should never be greater than or equal to 1.0
@@ -47,6 +52,7 @@ namespace Game.Paddle
                 }
             }
             _mistakeTimer.Start();
+            GD.Randomize();
         }
 
         public override void _Process(float delta)
@@ -76,12 +82,12 @@ namespace Game.Paddle
                 float paddleYPosition = PaddleToControl.Position.y;
                 float ballYPosition = _ballRef.Position.y;
                 // Case 1: The ball is above the paddle. Move up.
-                if(paddleYPosition - BALL_MARGIN > ballYPosition)
+                if(paddleYPosition - _ballMargin > ballYPosition)
                 {
                     _direction = new Vector2(0.0f, -MAX_SPEED);
                 }
                 // Case 2: The ball is below the paddle. Move down.
-                else if(paddleYPosition + BALL_MARGIN < ballYPosition)
+                else if(paddleYPosition + _ballMargin < ballYPosition)
                 {
                     _direction = new Vector2(0.0f, MAX_SPEED);
                 }
@@ -93,6 +99,7 @@ namespace Game.Paddle
             }
             else
             {
+                _ballMargin = (float)GD.RandRange(0.0, MAX_BALL_MARGIN);
                 _direction = Vector2.Zero;
                 PaddleToControl.SetDirection(_direction);
             }
