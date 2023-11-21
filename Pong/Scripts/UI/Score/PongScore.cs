@@ -1,6 +1,5 @@
 using Godot;
-using System;
-using System.Data.SqlTypes;
+using Util.ExtensionMethods;
 
 namespace Game.UI
 {
@@ -38,12 +37,12 @@ namespace Game.UI
         public override void _Ready()
         {
             _playerOneLabelRef = GetNode<Label>("%PlayerOneScore");
-            if(_playerOneLabelRef == null)
+            if(!_playerOneLabelRef.IsValid())
             {
                 GD.PrintErr("Player one score label not found! Is it in the scene tree? If so, is the node path incorrect?");
             }
             _playerTwoLabelRef = GetNode<Label>("%PlayerTwoScore");
-            if(_playerTwoLabelRef == null)
+            if(!_playerTwoLabelRef.IsValid())
             {
                 GD.PrintErr("Player two score label not found! Is it in the scene tree? If so, is the node path incorrect?");
             }
@@ -54,14 +53,14 @@ namespace Game.UI
         {
             // Reset player one score
             _playerOneScore = 0;
-            if (_playerOneLabelRef != null)
+            if (_playerOneLabelRef.IsValid())
             {
                 _playerOneLabelRef.Text = _playerOneScore.ToString();
             }
 
             // Reset player two score
             _playerTwoScore = 0;
-            if (_playerTwoLabelRef != null)
+            if (_playerTwoLabelRef.IsValid())
             {
                 _playerTwoLabelRef.Text = _playerTwoScore.ToString();
             }
@@ -78,7 +77,7 @@ namespace Game.UI
             {
                 case Player.PLAYER_ONE:
                     _playerOneScore++;
-                    if (_playerOneLabelRef != null)
+                    if (_playerOneLabelRef.IsValid())
                     {
                         _playerOneLabelRef.Text = _playerOneScore.ToString();
                     }
@@ -90,7 +89,7 @@ namespace Game.UI
 
                 case Player.PLAYER_TWO:
                     _playerTwoScore++;
-                    if (_playerTwoLabelRef != null)
+                    if (_playerTwoLabelRef.IsValid())
                     {
                         _playerTwoLabelRef.Text = _playerTwoScore.ToString();
                     }

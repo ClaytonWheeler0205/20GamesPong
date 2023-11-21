@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using Util.ExtensionMethods;
 
 namespace Game.Paddle
 {
@@ -31,10 +31,9 @@ namespace Game.Paddle
                     _direction.y = Input.GetAxis("player2_move_up", "player2_move_down");
                     break;
             }
-            if (PaddleToControl != null)
-            {
-                PaddleToControl.SetDirection(_direction);
-            }
+
+            if (PaddleToControl.IsValid()) { PaddleToControl.SetDirection(_direction); }
+
         }
     }
 }

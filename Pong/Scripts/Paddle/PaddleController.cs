@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Util.ExtensionMethods;
 
 namespace Game.Paddle
 {
@@ -20,8 +21,8 @@ namespace Game.Paddle
 
         public void Destroy()
         {
+            this.SafeQueueFree();
             _paddleToControl = null;
-            QueueFree();
         }
     }
 }

@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using Util.ExtensionMethods;
 
 namespace Game.UI
 {
@@ -17,14 +17,14 @@ namespace Game.UI
         {
             // Get the text label reference
             _textLabelRef = GetNode<Label>("%WinText");
-            if(_textLabelRef == null)
+            if(!_textLabelRef.IsValid())
             {
                 GD.PrintErr("Text label not found! Is it not in the scene?");
             }
 
             // Get the display timer reference
             _displayTimer = GetNode<Timer>("%DisplayTimer");
-            if(_displayTimer == null)
+            if(!_displayTimer.IsValid())
             {
                 GD.PrintErr("Display timer not found! Is it not in the scene?");
             }
@@ -41,7 +41,7 @@ namespace Game.UI
         public void DisplayText()
         {
             Visible = true;
-            if(_displayTimer != null)
+            if(_displayTimer.IsValid())
             {
                 _displayTimer.Start(_displayDuration);
             }
@@ -50,7 +50,7 @@ namespace Game.UI
         public void HideText()
         {
             Visible = false;
-            if(_displayTimer != null)
+            if(_displayTimer.IsValid())
             {
                 _displayTimer.Stop();
             }
