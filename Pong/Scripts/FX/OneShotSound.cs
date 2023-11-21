@@ -1,4 +1,5 @@
 using Godot;
+using Util.ExtensionMethods;
 
 namespace Game.FX
 {
@@ -21,7 +22,7 @@ namespace Game.FX
 
         public void OnSoundFinished()
         {
-            QueueFree();
+            this.SafeQueueFree();
         }
     }
 }

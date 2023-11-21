@@ -1,6 +1,7 @@
 using Game.Ball;
 using Godot;
 using System;
+using Util.ExtensionMethods;
 
 namespace Game.Paddle
 {
@@ -46,11 +47,14 @@ namespace Game.Paddle
             _mistakeTimer = GetNode<Timer>("%MistakeTimer");
             foreach(Node node in GetTree().GetNodesInGroup("Ball"))
             {
-                if(node is BallBase)
+                if(node is BallBase @base)
                 {
-                    _ballRef = (BallBase)node;
+                    _ballRef = @base;
+                    break;
                 }
             }
+            if(!_mistakeTimer.IsValid()) { return; }
+
             _mistakeTimer.Start();
             GD.Randomize();
         }
@@ -58,10 +62,8 @@ namespace Game.Paddle
         public override void _Process(float delta)
         {
             // Only set the direction if we have a ball to track and a paddle to move.
-            if (_ballRef != null && PaddleToControl != null && !_makeMistake)
-            {
-                SetDirection();
-            }
+            if (_ballRef.IsValid() && PaddleToControl.IsValid() && !_makeMistake) { SetDirection(); }
+
             if (_makeMistake)
             {
                 _makeMistake = false;

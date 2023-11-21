@@ -1,5 +1,6 @@
 using Game.UI;
 using Godot;
+using Util.ExtensionMethods;
 
 namespace Game
 {
@@ -14,25 +15,25 @@ namespace Game
         public override void _Ready()
         {
             _ballManager = GetNode<IGameManager>("%BallManager");
-            if (_ballManager == null)
+            if (!(_ballManager is Node ballNode) || !ballNode.IsValid())
             {
                 GD.PrintErr("Pong ball manager not found! Is it not in the scene?");
             }
 
             _paddleManager = GetNode<IGameManager>("%PaddleManager");
-            if (_paddleManager == null)
+            if (!(_paddleManager is Node paddleNode) || !paddleNode.IsValid())
             {
                 GD.PrintErr("Pong paddle manager not found! Is it not in the scene?");
             }
 
             _pongScore = GetNode<IGameScore>("%ScoreUI");
-            if(_pongScore == null)
+            if(!(_pongScore is Node scoreNode) || !scoreNode.IsValid())
             {
                 GD.PrintErr("Pong score display not found! Is it not in the scene?");
             }
 
             _winTextLabel = GetNode<ITextLabel>("%WinLabel");
-            if (_winTextLabel == null)
+            if (!(_winTextLabel is Node winNode) || !winNode.IsValid())
             {
                 GD.PrintErr("Win text label not found! Is it not in the scene?");
             }
@@ -42,31 +43,37 @@ namespace Game
 
         public void StartGame()
         {
-            _ballManager?.StartGame();
-            _paddleManager?.StartGame();
+            if((_ballManager is Node ballNode) && ballNode.IsValid()) { _ballManager.StartGame(); }
+
+            if((_paddleManager is Node paddleNode) && paddleNode.IsValid()) { _paddleManager.StartGame(); }
         }
 
         public void OnGameOver(Player winningPlayer)
         {
-            switch (winningPlayer)
+            if (_winTextLabel is Node winNode && winNode.IsValid())
             {
-                case Player.PLAYER_ONE:
-                    _winTextLabel?.SetText("Player One Wins!");
-                    break;
-                case Player.PLAYER_TWO:
-                    _winTextLabel?.SetText("Player Two Wins!");
-                    break;
+                switch (winningPlayer)
+                {
+                    case Player.PLAYER_ONE:
+                        _winTextLabel.SetText("Player One Wins!");
+                        break;
+                    case Player.PLAYER_TWO:
+                        _winTextLabel.SetText("Player Two Wins!");
+                        break;
+                }
+                _winTextLabel.DisplayText();
             }
-            _winTextLabel?.DisplayText();
 
-            _ballManager?.EndGame();
-            _paddleManager?.EndGame();
+            if(_ballManager is Node ballNode && ballNode.IsValid()) { _ballManager.EndGame(); }
+
+            if(_paddleManager is Node paddleNode && paddleNode.IsValid()) { _paddleManager.EndGame(); }
         }
 
         public void OnWinTextTimeout()
         {
-            _winTextLabel?.HideText();
-            _pongScore?.ResetScore();
+            if(_winTextLabel is Node winNode && winNode.IsValid()) { _winTextLabel.HideText(); }
+
+            if(_pongScore is Node scoreNode &&  scoreNode.IsValid()) { _pongScore.ResetScore(); }
             // Return to main menu
         }
 
@@ -74,10 +81,13 @@ namespace Game
         {
             if (@event.IsActionPressed("reset_game"))
             {
-                _ballManager?.EndGame();
-                _paddleManager?.EndGame();
-                _winTextLabel?.HideText();
-                _pongScore?.ResetScore();
+                if(_ballManager is Node ballNode && ballNode.IsValid() ) { _ballManager.EndGame(); }
+
+                if(_paddleManager is Node paddleNode && paddleNode.IsValid() ) { _paddleManager.EndGame(); }
+
+                if(_winTextLabel is Node winNode && winNode.IsValid() ) { _winTextLabel.HideText(); }
+
+                if(_pongScore is Node scoreNode && scoreNode.IsValid() ) { _pongScore.ResetScore(); }
             }
         }
     }

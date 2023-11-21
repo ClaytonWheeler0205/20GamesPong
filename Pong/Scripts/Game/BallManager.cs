@@ -1,5 +1,6 @@
 using Godot;
 using Game.Ball;
+using Util.ExtensionMethods;
 
 namespace Game
 {
@@ -28,14 +29,14 @@ namespace Game
         {
             // Get the timer child node reference
             _timerRef = GetNode<Timer>("%PauseTimer");
-            if(_timerRef == null)
+            if(!_timerRef.IsValid())
             {
                 GD.PrintErr("Timer obejct not found! Is it not in the scene?");
             }
 
             // Get the ball child node reference
             _ballRef = GetNode<BallBase>("%Ball");
-            if(_ballRef == null)
+            if(!_ballRef.IsValid())
             {
                 GD.PrintErr("Ball object not found! Is it not in the scene?");
             }
@@ -44,37 +45,36 @@ namespace Game
         
         public bool StartGame()
         {
-            if(_ballRef != null)
-            {
-                _ballRef.StartBall();
-                _isActive = true;
-                return true;
-            }
-            return false;
+            if(!_ballRef.IsValid()) { return false; }
+
+            _ballRef.StartBall();
+            _isActive = true;
+            return true;
         }
 
         public bool EndGame()
         {
-            if(_ballRef != null)
-            {
-                _ballRef.ResetBall();
-                _isActive = false;
-                return true;
-            }
-            return false;
+            if(!_ballRef.IsValid()) { return false; }
+
+            _ballRef.ResetBall();
+            _isActive = false;
+            return true;
         }
 
         public void OnBallGoalHit()
         {
-            _timerRef?.Start(_pauseTime);
+            if(!_timerRef.IsValid()) { return; }
+
+            _timerRef.Start(_pauseTime);
         }
 
         public void OnPauseTimerTimeout()
         {
-            if (_isActive)
-            {
-                _ballRef?.StartBall();
-            }
+            if (!_isActive) { return; }
+
+            if (!_ballRef.IsValid()) { return; }
+
+            _ballRef.StartBall();
         }
     }
 }

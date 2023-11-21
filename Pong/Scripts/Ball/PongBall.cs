@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Game.Paddle;
+using Util.ExtensionMethods;
 
 namespace Game.Ball
 {
@@ -78,7 +79,7 @@ namespace Game.Ball
             // Player 1 is always the first player the ball should move towards.
             _playerToFace = Player.PLAYER_ONE;
             _spriteRef = GetNode<Sprite>("%BallSprite");
-            if(_spriteRef == null)
+            if(!_spriteRef.IsValid())
             {
                 GD.PrintErr("Sprite node not found! Does the sprite node exist? If it does, check the sprite node name.");
             }
@@ -87,7 +88,7 @@ namespace Game.Ball
 
         public override void ResetBall()
         {
-            if (_spriteRef != null)
+            if (_spriteRef.IsValid())
             {
                 _spriteRef.Visible = false;
             }
@@ -119,7 +120,7 @@ namespace Game.Ball
             // Set the ball's direction, speed, and visibility
             SetDirection(new Vector2(0, -1).Rotated(angle));
             _currentSpeed = Speed;
-            if (_spriteRef != null)
+            if (_spriteRef.IsValid())
             {
                 _spriteRef.Visible = true;
             }
@@ -131,7 +132,7 @@ namespace Game.Ball
         {
             // Move the ball and grab a KinematicCollision2D if we have hit something
             KinematicCollision2D collision = MoveAndCollide(Direction * _currentSpeed * delta);
-            if (collision != null)
+            if (collision.IsValid())
             {
                 HandleCollision(collision);
             }

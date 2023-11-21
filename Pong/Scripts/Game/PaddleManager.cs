@@ -1,5 +1,6 @@
 using Game.Paddle;
 using Godot;
+using Util.ExtensionMethods;
 
 namespace Game
 {
@@ -22,14 +23,14 @@ namespace Game
         {
             // Get a reference to the left paddle
             _leftPaddleRef = GetNode<PaddleBase>("%LeftPaddle");
-            if(_leftPaddleRef == null)
+            if(!_leftPaddleRef.IsValid())
             {
                 GD.PrintErr("Left paddle reference not found! Is it not in the scene?");
             }
 
             // Get a reference to the right paddle
             _rightPaddleRef = GetNode<PaddleBase>("%RightPaddle");
-            if(_rightPaddleRef == null)
+            if(!_rightPaddleRef.IsValid())
             {
                 GD.PrintErr("Right paddle reference not found! Is it not in the scene?");
             }
@@ -38,10 +39,7 @@ namespace Game
         public bool StartGame()
         {
             CreateControllers();
-            if (_leftPaddleController == null || _rightPaddleController == null)
-            {
-                return false;
-            }
+            if (!_leftPaddleController.IsValid() || !_rightPaddleController.IsValid()) { return false; }
             
             // Assign our controllers paddles they will be controlling in the game
             _rightPaddleController.SetPaddleToControl(_rightPaddleRef);
@@ -53,10 +51,8 @@ namespace Game
         {
             bool isSuccessful = true;
             // Attempt to destroy and cleanup the left paddle controller
-            if(_leftPaddleController == null)
-            {
-                isSuccessful = false;
-            }
+            if(!_leftPaddleController.IsValid()) { isSuccessful = false; }
+
             else
             {
                 _leftPaddleController.Destroy();
@@ -64,10 +60,8 @@ namespace Game
             }
 
             // Attempt to destroy and cleanup the right paddle controller
-            if(_rightPaddleController == null)
-            {
-                isSuccessful = false;
-            }
+            if(!_rightPaddleController.IsValid()) { isSuccessful = false; }
+
             else
             {
                 _rightPaddleController.Destroy();
@@ -75,8 +69,11 @@ namespace Game
             }
 
             // Reset our pong paddles to their starting state
-            _rightPaddleRef?.ResetPaddle();
-            _leftPaddleRef?.ResetPaddle();
+            if (!_rightPaddleRef.IsValid()) { return false; }
+            _rightPaddleRef.ResetPaddle();
+
+            if(!_leftPaddleRef.IsValid()) { return false; }
+            _leftPaddleRef.ResetPaddle();
 
             return isSuccessful;
         }
