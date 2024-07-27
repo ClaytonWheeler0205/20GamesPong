@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Pong/Sprites/PongBackground.png" type="Texture" id=1]
 [ext_resource path="res://Pong/Sprites/PongWall.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Pong/Scripts/Game/PongGame.cs" type="Script" id=5]
 [ext_resource path="res://Pong/Scenes/UI/UI_WinDisplay.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Pong/Scenes/Game/BallManager.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Pong/Scenes/UI/MainMenu.tscn" type="PackedScene" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -164,10 +165,15 @@ unique_name_in_owner = true
 visible = false
 _displayDuration = 3.0
 
+[node name="MainMenu" parent="GUI" instance=ExtResource( 8 )]
+unique_name_in_owner = true
+
 [connection signal="PlayerScored" from="Managers/BallManager/Ball" to="GUI/ScoreUI" method="OnPlayerScored"]
 [connection signal="GameOver" from="GUI/ScoreUI" to="." method="OnGameOver"]
 [connection signal="timeout" from="GUI/WinLabel/DisplayTimer" to="." method="OnWinTextTimeout"]
+[connection signal="pressed" from="GUI/MainMenu/MenuBorder/MenuBG/VBoxContainer/PlayButton" to="." method="OnGameStartPressed"]
 
 [editable path="Managers/BallManager"]
 [editable path="Managers/PaddleManager"]
 [editable path="GUI/WinLabel"]
+[editable path="GUI/MainMenu"]

@@ -15,17 +15,11 @@ namespace Game.UI
         public override void _Ready()
         {
             base._Ready();
-            SetPlayButton();
-        }
-
-        public void SetPlayButton()
-        {
-            GrabFocus();
+            SetButton();
         }
 
         private void OnPlayButtonPressed()
         {
-            GD.Print("Play game!");
             EmitSignal(nameof(PlayGame));
         }
     }

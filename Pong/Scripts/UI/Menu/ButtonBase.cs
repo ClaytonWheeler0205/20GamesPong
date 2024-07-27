@@ -20,6 +20,16 @@ namespace Game.UI
             _root = GetNode("/root");
         }
 
+        public void SetButton()
+        {
+            GrabFocus();
+        }
+
+        public void UnsetButton()
+        {
+            ReleaseFocus();
+        }
+
         protected void OnFocusExit()
         {
             _root.CallDeferred("add_child", _menuMoveSFX.Instance());
