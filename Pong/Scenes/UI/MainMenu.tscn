@@ -1,5 +1,139 @@
-[gd_scene format=2]
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Pong/Fonts/Pong_Text_Font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Pong/Sprites/PongButtonFocused.png" type="Texture" id=2]
+[ext_resource path="res://Pong/Sprites/PongButtonUnfocused.png" type="Texture" id=3]
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="MenuBorder" type="ColorRect" parent="."]
+anchor_left = 0.244
+anchor_right = 0.732
+anchor_bottom = 1.0
+margin_left = 0.143982
+margin_right = 0.431946
+
+[node name="MenuBG" type="ColorRect" parent="MenuBorder"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 25.0
+margin_right = -25.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBorder/MenuBG"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_right = -25.0
+
+[node name="Title" type="Label" parent="MenuBorder/MenuBG/VBoxContainer"]
+margin_right = 401.0
+margin_bottom = 110.0
+custom_fonts/font = ExtResource( 1 )
+text = "PONG"
+align = 1
+
+[node name="PlayButton" type="TextureButton" parent="MenuBorder/MenuBG/VBoxContainer"]
+margin_top = 114.0
+margin_right = 400.0
+margin_bottom = 189.0
+rect_min_size = Vector2( 400, 75 )
+rect_pivot_offset = Vector2( 25, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+shortcut_in_tooltip = false
+action_mode = 0
+button_mask = 0
+texture_normal = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+expand = true
+
+[node name="Label" type="Label" parent="MenuBorder/MenuBG/VBoxContainer/PlayButton"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -195.0
+margin_top = -41.5
+margin_right = 338.0
+margin_bottom = 68.5
+rect_scale = Vector2( 0.75, 0.75 )
+custom_fonts/font = ExtResource( 1 )
+text = "PLAY"
+align = 1
+
+[node name="ModeSelect" type="Label" parent="MenuBorder/MenuBG/VBoxContainer"]
+margin_top = 193.0
+margin_right = 401.0
+margin_bottom = 303.0
+custom_fonts/font = ExtResource( 1 )
+text = "1P"
+align = 1
+
+[node name="ModeSelectButton" type="TextureButton" parent="MenuBorder/MenuBG/VBoxContainer"]
+margin_top = 307.0
+margin_right = 400.0
+margin_bottom = 382.0
+rect_min_size = Vector2( 400, 75 )
+rect_pivot_offset = Vector2( 25, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+shortcut_in_tooltip = false
+action_mode = 0
+button_mask = 0
+texture_normal = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+expand = true
+
+[node name="Label" type="Label" parent="MenuBorder/MenuBG/VBoxContainer/ModeSelectButton"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -151.0
+margin_top = -21.5
+margin_right = 641.0
+margin_bottom = 88.5
+rect_scale = Vector2( 0.4, 0.4 )
+custom_fonts/font = ExtResource( 1 )
+text = "TOGGLE PLAYERS"
+align = 1
+
+[node name="ScoreGoal" type="Label" parent="MenuBorder/MenuBG/VBoxContainer"]
+margin_top = 386.0
+margin_right = 401.0
+margin_bottom = 496.0
+custom_fonts/font = ExtResource( 1 )
+text = "5"
+align = 1
+
+[node name="ScoreGoalButton" type="TextureButton" parent="MenuBorder/MenuBG/VBoxContainer"]
+margin_top = 500.0
+margin_right = 400.0
+margin_bottom = 575.0
+rect_min_size = Vector2( 400, 75 )
+rect_pivot_offset = Vector2( 25, 0 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+shortcut_in_tooltip = false
+action_mode = 0
+button_mask = 0
+texture_normal = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+expand = true
+
+[node name="Label" type="Label" parent="MenuBorder/MenuBG/VBoxContainer/ScoreGoalButton"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -153.0
+margin_top = -22.5
+margin_right = 639.0
+margin_bottom = 87.5
+rect_scale = Vector2( 0.4, 0.4 )
+custom_fonts/font = ExtResource( 1 )
+text = "SET GOAL SCORE"
+align = 1
