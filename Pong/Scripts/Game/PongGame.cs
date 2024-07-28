@@ -70,8 +70,8 @@ namespace Game
 
             if ((_paddleManager is Node paddleNode) && paddleNode.IsValid()) { _paddleManager.StartGame(); }
 
-            if (_playButton.IsValid()) { _playButton.UnsetButton(); }
             if (_mainMenu.IsValid()) { _mainMenu.Visible = false; }
+            if (_playButton.IsValid()) { _playButton.UnsetButton(); }
         }
 
         public void OnGameOver(Player winningPlayer)

@@ -32,7 +32,10 @@ namespace Game.UI
 
         protected void OnFocusExit()
         {
-            _root.CallDeferred("add_child", _menuMoveSFX.Instance());
+            if (IsVisibleInTree())
+            {
+                _root.CallDeferred("add_child", _menuMoveSFX.Instance());
+            }
         }
 
         protected void OnButtonPressed()
