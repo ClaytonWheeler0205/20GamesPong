@@ -69,6 +69,11 @@ namespace Game.Ball
             _isMoving = true;
         }
 
+        /// <summary>
+        /// Readies the ball for a game's reset
+        /// </summary>
+        public abstract void ReadyBall();
+
         protected void SetDirection(Vector2 newDirection)
         {
             _direction = newDirection;

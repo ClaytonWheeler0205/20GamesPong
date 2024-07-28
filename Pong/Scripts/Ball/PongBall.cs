@@ -63,7 +63,7 @@ namespace Game.Ball
         /// <param name="scoringPlayer">The player that scored a point</param>
         [Signal]
         delegate void PlayerScored(Player scoringPlayer);
-        
+
         /// <summary>
         /// Singnal to let the game know that the ball has hit a goal in the arena.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Game.Ball
             // Player 1 is always the first player the ball should move towards.
             _playerToFace = Player.PLAYER_ONE;
             _spriteRef = GetNode<Sprite>("%BallSprite");
-            if(!_spriteRef.IsValid())
+            if (!_spriteRef.IsValid())
             {
                 GD.PrintErr("Sprite node not found! Does the sprite node exist? If it does, check the sprite node name.");
             }
@@ -126,6 +126,11 @@ namespace Game.Ball
             }
 
             base.StartBall();
+        }
+
+        public override void ReadyBall()
+        {
+            _playerToFace = Player.PLAYER_ONE;
         }
 
         protected override void MoveBall(float delta)
@@ -205,7 +210,7 @@ namespace Game.Ball
                     }
 
                     // Normalize the vector and increase the ball's speed.
-                    SetDirection(Direction.Normalized()); 
+                    SetDirection(Direction.Normalized());
                     _currentSpeed += _speedIncrease;
                 }
             }
