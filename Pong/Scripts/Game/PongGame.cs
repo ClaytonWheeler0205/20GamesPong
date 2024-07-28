@@ -109,16 +109,23 @@ namespace Game
         {
             if (@event.IsActionPressed("reset_game"))
             {
-                if (_ballManager is Node ballNode && ballNode.IsValid()) { _ballManager.EndGame(); }
+                if (!_mainMenu.Visible)
+                {
+                    if (_ballManager is Node ballNode && ballNode.IsValid()) { _ballManager.EndGame(); }
 
-                if (_paddleManager is Node paddleNode && paddleNode.IsValid()) { _paddleManager.EndGame(); }
+                    if (_paddleManager is Node paddleNode && paddleNode.IsValid()) { _paddleManager.EndGame(); }
 
-                if (_winTextLabel is Node winNode && winNode.IsValid()) { _winTextLabel.HideText(); }
+                    if (_winTextLabel is Node winNode && winNode.IsValid()) { _winTextLabel.HideText(); }
 
-                if (_pongScore is Node scoreNode && scoreNode.IsValid()) { _pongScore.ResetScore(); }
+                    if (_pongScore is Node scoreNode && scoreNode.IsValid()) { _pongScore.ResetScore(); }
 
-                if (_mainMenu.IsValid()) { _mainMenu.Visible = true; }
-                if (_playButton.IsValid()) { _playButton.SetButton(); }
+                    if (_mainMenu.IsValid()) { _mainMenu.Visible = true; }
+                    if (_playButton.IsValid()) { _playButton.SetButton(); }
+                }
+                else
+                {
+                    GetTree().Quit();
+                }
             }
         }
     }
