@@ -16,6 +16,15 @@ namespace Game
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
+            SetNodeReferences();
+            if ((_ballManager is Node ballNode) && ballNode.IsValid())
+            {
+                _playButton.SetButton();
+            }
+        }
+
+        private void SetNodeReferences()
+        {
             _ballManager = GetNode<IGameManager>("%BallManager");
             if (!(_ballManager is Node ballNode) || !ballNode.IsValid())
             {
@@ -51,12 +60,6 @@ namespace Game
             {
                 GD.PrintErr("Play Button not found! Is it not in the scene?");
             }
-            else
-            {
-                _playButton.SetButton();
-            }
-
-
         }
 
         public void OnGameStartPressed()
@@ -64,7 +67,7 @@ namespace Game
             StartGame();
         }
 
-        public void StartGame()
+        private void StartGame()
         {
             if ((_ballManager is Node ballNode) && ballNode.IsValid()) { _ballManager.StartGame(); }
 
@@ -121,10 +124,6 @@ namespace Game
 
                     if (_mainMenu.IsValid()) { _mainMenu.Visible = true; }
                     if (_playButton.IsValid()) { _playButton.SetButton(); }
-                }
-                else
-                {
-                    GetTree().Quit();
                 }
             }
         }
